@@ -1,0 +1,51 @@
+<%- include("partials/header.ejs") %>
+
+<ul>
+    <% if(locals.posts) { %>    
+        <% if(posts.length == 0) { %>
+            <section class="py-5 text-center container"> 
+                <div class="row py-lg-5"  height="300px"> 
+                    <div class="col-lg-6 col-md-8 mx-auto"> 
+                        <h1 class="fw-light">Nenhum post ainda foi publicado.</h1> 
+                        <p class="lead text-body-secondary">Seja o primeiro a escrever no blog!</p> 
+                        <p> <a href="/publicar" class="btn btn-primary my-2">Publicar</a></p> 
+                    </div> 
+                </div> 
+            </section>
+        <% } else {%>
+            <div class="container">
+            <% for(let i = 0; i < posts.length; i++) { %>
+                
+                <% if(i % 2 === 0) { %>
+                <div class="row mb-2">
+                <% } %> 
+
+                    <div class="col-md-6"> 
+                        <div class="row g-0 border rounded overflow-hidden flex-md-row mb-4 shadow-sm h-md-250 position-relative"> 
+                            <div class="col p-4 d-flex flex-column position-static"> 
+                                <strong class="d-inline-block mb-2 text-primary-emphasis">World</strong> 
+                                <h3 class="mb-0"><%= posts[i] %></h3> 
+                                <div class="mb-1 text-body-secondary">Nov 12</div> 
+                                <p class="card-text mb-auto">This is a wider card with supporting text below as a natural lead-in to additional content.</p> 
+                                <a href="/post?titulo=<%= posts[i] %>" class="icon-link gap-1 icon-link-hover stretched-link"> Continue lendo
+                                
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-chevron-right" viewBox="0 0 16 16">
+                                    <path fill-rule="evenodd" d="M4.646 1.646a.5.5 0 0 1 .708 0l6 6a.5.5 0 0 1 0 .708l-6 6a.5.5 0 0 1-.708-.708L10.293 8 4.646 2.354a.5.5 0 0 1 0-.708"/>
+                                    </svg> 
+
+                                </a> 
+                            </div> 
+                                    
+                        </div> 
+                    </div> 
+                
+                <% if(i % 2 !== 0) { %>    
+                </div>
+                <% } %>
+
+            <% } %>
+            </div>
+        <% } }%>
+</ul>
+
+<%- include("partials/footer.ejs") %>

@@ -1,0 +1,8 @@
+textarea {
+    resize: none;
+    height: 400px;
+}
+
+.texto {
+    white-space: pre-wrap;
+}
