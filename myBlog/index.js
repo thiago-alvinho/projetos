@@ -23,9 +23,11 @@ app.get("/post", (req, res) => {
     const postEscolhido = req.query.titulo;
     const nomeArquivo = postEscolhido + ".txt";
 
+    // Leitura do post
     fs.readFile("posts/" + nomeArquivo, 'utf-8', (err, data) => {
         if (err) {
-            throw err;
+            console.error(err);
+            res.status(500).send("Erro ao tentar ler o post");
         }
         
         res.render("post.ejs", { titulo: postEscolhido, texto: data});
@@ -33,10 +35,27 @@ app.get("/post", (req, res) => {
 
 });
 
+app.post("/post", (req, res) => {
+    const nomeArquivo = req.body["titulo"] + ".txt";
+    const textoPost = req.body["texto"];
+
+    // Inserindo o nome do post no vetor de posts
+    nomePosts.push(req.body["titulo"]);
+
+    // Criando o arquivo do post
+    fs.writeFile("posts/" + nomeArquivo, textoPost, (err) => {
+        if (err) throw err;
+        console.log("Arquivo salvo");
+    });
+
+    res.redirect("/");
+})
+
 app.delete("/post", (req, res) => {
     const postEscolhido = req.query.titulo;
     const nomeArquivo = postEscolhido + ".txt";
 
+    // Excluindo o arquivo do post
     fs.rm("posts/" + nomeArquivo, (err) => {
         if (err) {
             console.error(err);
@@ -46,66 +65,68 @@ app.delete("/post", (req, res) => {
         console.log(`Arquivo ${postEscolhido} foi removido.`);
     });
 
+    // Retirando o nome do post do vetor de posts
     const index = nomePosts.indexOf(postEscolhido);
-
-    console.log(nomePosts);
 
     if(index > -1) {
         nomePosts.splice(index, 1);
     }
-
-    console.log(nomePosts);
 
     res.redirect("/");
 });
 
 app.put("/post", (req,res) => {
     const postEscolhido = req.query.titulo;
-    const nomeArquivo = postEscolhido + ".txt";
+    const nomeArquivoAntigo = postEscolhido + ".txt";
+    const nomeArquivoNovo = req.body["titulo"] + ".txt";
+    const textoPost = req.body["texto"];
 
-    fs.readFile("posts/" + nomeArquivo, 'utf-8', (err, data) => {
-        if (err) {
-            throw err;
-        }
-        
-        res.render("publicar.ejs", { titulo: postEscolhido, texto: data});
-    });
-
-    fs.rm("posts/" + nomeArquivo, (err) => {
+    // Excluindo o post desatualizado
+    fs.rm("posts/" + nomeArquivoAntigo, (err) => {
         if (err) {
             console.error(err);
-            return res.status(500).send("Erro ao excluir");
+            return res.status(500).send("Erro ao excluir o arquivo");
         }
 
         console.log(`Arquivo ${postEscolhido} foi removido.`);
     });
 
+    // Retirando o post desatualizado do vetor de nomes de posts
     const index = nomePosts.indexOf(postEscolhido);
-
-    console.log(nomePosts);
 
     if(index > -1) {
         nomePosts.splice(index, 1);
     }
 
-    console.log(nomePosts);
-
-});
-
-app.post("/publicar", (req, res) => {
-    const nomeArquivo = req.body["titulo"] + ".txt";
-    const textoPost = req.body["texto"];
-    
+    // Inserindo o novo titulo do post no vetor
     nomePosts.push(req.body["titulo"]);
 
-    fs.writeFile("posts/"+ nomeArquivo, textoPost, (err) => {
-        if (err) throw err;
-        console.log("O post foi salvo.");
+    // Salvando o post atualizado
+    fs.writeFile("posts/" + nomeArquivoNovo, textoPost, (err) => {
+        if (err) {
+            console.error(err);
+            res.status(500).send("Erro ao salvar o arquivo");
+        }
+        console.log("Arquivo salvo");
     });
 
     res.redirect("/");
+
 });
 
+app.get("/editar", (req, res) => {
+    const postEscolhido = req.query.titulo;
+    const nomeArquivo = postEscolhido + ".txt";
+
+    fs.readFile("posts/" + nomeArquivo, 'utf-8', (err, data) => {
+        if (err) {
+            console.error(err);
+            res.status(500).send("Não foi possivel ler o arquivo");
+        }
+        
+        res.render("editar.ejs", { titulo: postEscolhido, texto: data});
+    });
+})
 app.listen(port, () => {
     console.log(`I'm listening on port ${port}`);
 })

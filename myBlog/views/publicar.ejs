@@ -1,22 +1,7 @@
 <%- include("partials/header.ejs") %>
 
-<% if(locals.texto && locals.titulo) { %>
     <div class="container">
-    <form action="/publicar" method="post">
-        <div class="mb-3">
-            <label for="Titulo" class="form-label">Título</label>
-            <input type="text" class="form-control" name="titulo" value="<%= titulo %>">
-        </div>
-        <div class="mb-3">
-            <label for="Texto" class="form-label">Compartilhe suas ideias com a gente.</label>
-            <textarea class="form-control" name="texto"><%= texto %></textarea>
-        </div>
-        <button type="submit" class="btn btn-primary">Publicar</button>
-    </form>
-    </div>
-<% } else { %>
-    <div class="container">
-    <form action="/publicar" method="post">
+    <form action="/post" method="post">
         <div class="mb-3">
             <label for="Titulo" class="form-label">Título</label>
             <input type="text" class="form-control" name="titulo">
@@ -28,6 +13,5 @@
         <button type="submit" class="btn btn-primary">Publicar</button>
     </form>
     </div>
-<% } %>
 
 <%- include("partials/footer.ejs") %>

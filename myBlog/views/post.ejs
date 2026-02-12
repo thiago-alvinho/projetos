@@ -2,15 +2,20 @@
 
 <% if(locals.titulo && locals.texto) { %>
     <div class="container">
-        <h1 class="text-center border-bottom pb-3"><%= titulo %></h1>
-        <div class="texto py-3"><%= texto %></div>
-        
-        <form action="/post?_method=PUT&titulo=<%= titulo %>" method="POST">
-            <input class="btn btn-primary" type="submit" value="Editar post">
-        </form>
         <form action="/post?_method=DELETE&titulo=<%= titulo %>" method="POST">
-            <input class="btn btn-primary" type="submit" value="Excluir post">
+
+            <h1 class="text-center border-bottom pb-3"><%= titulo %></h1>
+
+            <div class="texto py-3"><%= texto %></div>
+    
+            <a href="/editar?titulo=<%= titulo %>">
+                <button type="button" class="btn btn-primary"> Editar post</button>
+            </a>
+
+            <button class="btn btn-primary" type="submit">Excluir post</button>
+        
         </form>
+
     </div>
 <% } else { %>
     <div class="container">
